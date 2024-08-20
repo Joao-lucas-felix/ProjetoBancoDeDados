@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: ProjetoBancoDeDados
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/projeto_banco_de_dados?useTimezone=true&serverTimezone=UTC
+    username: root
+    password: admin
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    open-in-view: false
