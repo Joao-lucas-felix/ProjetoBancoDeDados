@@ -2,6 +2,8 @@ package com.joao_lucas_felix.ProjetoBancoDeDados.domain.DataTransferObjects;
 
 import lombok.*;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 
 @Getter
@@ -9,7 +11,9 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class PedidoDto {
+public class PedidoDto implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private Long idUser;
     private Long idLivro;
     private Date data;

@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,6 +15,8 @@ import java.util.Date;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class PedidoId implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     @Column(name = "id_user")
     private Long idUser;
 
