@@ -1,9 +1,6 @@
 package com.joao_lucas_felix.ProjetoBancoDeDados.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -12,6 +9,7 @@ import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 @Table(name = "pedido")
@@ -24,8 +22,17 @@ public class Pedido implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @EmbeddedId
-    private PedidoId id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(name = "id_usuario")
+    private Long idUser;
+
+    @Column(name = "id_livro")
+    private Long idLivro;
+
+    @Column(name = "data")
+    private Date data;
 
     @Column(name = "quantidade")
     private Integer quantidade;
