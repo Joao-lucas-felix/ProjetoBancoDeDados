@@ -14,12 +14,16 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
 
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Service
 public class UsuarioService {
     private static final Logger logger = Logger.getLogger(UsuarioService.class.getName());
+    private static final Pattern cpfPattern =
+            Pattern.compile("\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}");
     private final UsuarioRepository repository;
     private final PagedResourcesAssembler<UsuarioDto> assembler;
     @Autowired
@@ -29,10 +33,19 @@ public class UsuarioService {
         this.assembler = assembler;
     }
 
+    public static boolean validarFormatoDoCpf(String input) {
+        Matcher matcher = cpfPattern.matcher(input);
+        return matcher.matches();
+    }
+
+
     public UsuarioDto create(UsuarioDto usuarioDto) {
         if(usuarioDto == null) throw new RuntimeException("Informações obrigatorias nulas");
 
-        logger.info("Criando Autor");
+        logger.info("Criando Usuario");
+        if (!validarFormatoDoCpf(usuarioDto.getCpf()))
+            throw new RuntimeException("Cpf no formato incorreto por favor " +
+                    "informe um cpf no formato \"xxx.xxx.xxx-xx\" onde x é um digito de 0 a 9");
 
         Usuario usuarioParaSerSalvo = new Usuario(usuarioDto.getKey(), 
                 usuarioDto.getNome(), usuarioDto.getCpf(), usuarioDto.getEnd());
@@ -108,6 +121,10 @@ public class UsuarioService {
     public UsuarioDto update(UsuarioDto dto) {
         if (dto == null) throw new RuntimeException("Usuario com informações nulas!");
         logger.info("Atualizando os dados do Usuario com o id: "+dto.getKey()+"!");
+        if (!validarFormatoDoCpf(dto.getCpf()))
+            throw new RuntimeException("Cpf no formato incorreto por favor " +
+                    "informe um cpf no formato \"xxx.xxx.xxx-xx\" onde x é um digito de 0 a 9");
+
         Usuario usuarioASerAtualizado =
                 repository.findById(dto.getKey())
                         .orElseThrow(() -> new RuntimeException("O autor que você está tentando atulizar não existe"));
