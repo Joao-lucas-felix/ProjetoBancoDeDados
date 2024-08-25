@@ -26,7 +26,8 @@ public class Livro implements Serializable {
     private String description;
     @Column(name = "preco")
     private Double preco;
-    @Column(name = "data_lancamento")
+    @Column(name = "data_lacamento")
+    @Temporal(TemporalType.DATE)
     private Date dataLacamento;
     @Column(name = "qtd_estoque")
     private Integer qtdEstoque;
