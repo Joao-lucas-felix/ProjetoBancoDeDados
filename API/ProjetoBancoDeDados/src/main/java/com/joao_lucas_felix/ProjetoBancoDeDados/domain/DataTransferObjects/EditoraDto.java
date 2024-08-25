@@ -1,6 +1,7 @@
 package com.joao_lucas_felix.ProjetoBancoDeDados.domain.DataTransferObjects;
 
 import lombok.*;
+import org.springframework.hateoas.EntityModel;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -10,9 +11,9 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class EditoraDto implements Serializable {
+public class EditoraDto extends EntityModel<EditoraDto> implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    private Long id;
+    private Long key;
     private String nome;
 }
