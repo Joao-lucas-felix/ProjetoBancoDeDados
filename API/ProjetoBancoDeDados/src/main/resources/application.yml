@@ -9,5 +9,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
-    show-sql: false
+    show-sql: true
     open-in-view: false
+server:
+  error:
+    include-stacktrace: never
