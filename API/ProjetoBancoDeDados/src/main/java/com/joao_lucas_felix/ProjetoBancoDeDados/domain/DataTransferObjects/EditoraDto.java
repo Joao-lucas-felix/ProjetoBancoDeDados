@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 public class EditoraDto extends EntityModel<EditoraDto> implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

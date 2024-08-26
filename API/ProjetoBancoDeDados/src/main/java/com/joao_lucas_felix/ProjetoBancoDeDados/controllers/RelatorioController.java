@@ -14,11 +14,11 @@ public class RelatorioController {
     private static RelatorioService service;
     @Autowired
     public RelatorioController(RelatorioService service){
-        this.service = service;
+        RelatorioController.service = service;
     }
     @GetMapping
     public ResponseEntity<RelatorioDto> getRelatorioSistema(){
-        return ResponseEntity.ok(this.service.getRelatorio());
+        return ResponseEntity.ok(service.getRelatorio());
 
     }
 }

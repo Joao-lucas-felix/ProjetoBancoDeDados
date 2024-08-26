@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 public class UsuarioDto extends RepresentationModel<UsuarioDto> implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

@@ -105,7 +105,7 @@ public class LivroService {
 
     public PagedModel<EntityModel<LivroDto>> findLivroByTitulo(String titulo, Pageable pageable) {
 
-        logger.info("Buscando Usuario com o nome: " + titulo + "!");
+        logger.info("Buscando Livro com o nome: " + titulo + "!");
 
         Page<Livro> livroPage = repository.findLivroByTitulo(titulo, pageable);
 
@@ -159,11 +159,11 @@ public class LivroService {
     }
 
     public void delete(Long id) {
-        Livro autorParaDeletar = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Não foi encontrado usuario com esse ID!"));
+        Livro livro = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Não foi encontrado Livro com esse ID!"));
 
         logger.info("Deletando o Livro com id: "+id+"!");
-        repository.delete(autorParaDeletar);
+        repository.delete(livro);
 
     }
 }
