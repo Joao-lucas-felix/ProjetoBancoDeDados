@@ -1,10 +1,12 @@
 package com.joao_lucas_felix.ProjetoBancoDeDados.domain.DataTransferObjects;
 
+import com.joao_lucas_felix.ProjetoBancoDeDados.domain.Autor;
 import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -20,4 +22,6 @@ public class LivroDto extends RepresentationModel<LivroDto> implements Serializa
     private Double preco;
     private String dataLancamento;
     private Integer qtdEstoque;
+    private String nomeEditora;
+    private Set<String> autores;
 }

@@ -8,8 +8,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     @Query("SELECT u FROM Usuario u WHERE u.nome LIKE LOWER(CONCAT ('%',:nome,'%'))")
     Page<Usuario> findUsuarioByNome(@Param("nome") String name, Pageable pageable);
+
+    Optional<Usuario> findUsuarioByCpf(@Param("cpf") String cpf);
+
 }

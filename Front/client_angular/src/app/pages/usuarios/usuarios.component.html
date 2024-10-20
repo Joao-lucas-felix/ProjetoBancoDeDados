@@ -1,0 +1,77 @@
+<a class="btn btn-sm mb-2" [routerLink]="['../']">
+    Voltar
+</a>
+
+<form [formGroup]="searchForm" (ngSubmit)="pesquisarUsuario()">
+
+    <div class="form-group">
+        <input type="text" 
+        class="form-control m-2 p-2"
+        formControlName="nome"
+        >
+        
+        
+        <button class=" m-2  btn btn-primary btn-sm"
+                (click)="pesquisarUsuario()"
+        >Pesquisar</button>
+    </div>
+</form> 
+
+@if(pageOfUsuarios(); as usuarios) {
+    @for (usuario of pageOfUsuarios()?._embedded?.usuarioDtoList; track usuario) {
+        <div class="row ">
+            <div class="col-2"></div>
+            <div class="col">
+            <div class="card m-2 p-1" >
+                <div class="card-body mx-auto">
+                    <p class="card-title">
+                        Id:  
+                        {{usuario.key}} 
+                    </p>
+                    <p class="card-text">
+                        <strong>Nome:  </strong>
+                        {{usuario.nome}}
+                    </p>
+                    <p class="card-text">
+                        <strong>CPF cadastrado: </strong>
+                        {{usuario.cpf }}
+                    </p>
+                    <p class="card-text">
+                        <strong>Endereço: </strong>
+                        {{usuario.end }}
+                    </p>
+                    <div class="container">
+                        <a  [routerLink]="[usuario.key]"
+                        class="btn btn-sm btn-primary m-2 ">Ver Pedidos do usuario</a>
+                        <a  [routerLink]="['edit',usuario.key]"
+                        class="btn btn-sm btn-secondary m-2 ">Editar Cadastro</a>
+                    </div>
+                </div>
+ 
+            </div>   
+            </div>
+            <div class="col-2"></div>
+        </div>
+    }@empty {
+
+        <div class="row">
+            <div class="col"></div>
+            <div class="col">
+            <div class="card m-2 p-3">
+                <div class="card-body mx-auto">
+                    <h2 class="card-title">
+                        Algo deu Errado!
+                    </h2>
+                    <p class="card-text">
+                        Houve um error ao carregar os livros por favor tente novamente.
+                    </p>
+
+                    <a routerLink="" style="margin: 5px;" class="btn btn-sm btn-primary"> Clique aqui para voltar Para Home </a>
+                
+                </div>
+            </div>   
+            </div>
+            <div class="col"></div>
+        </div>
+    }
+}

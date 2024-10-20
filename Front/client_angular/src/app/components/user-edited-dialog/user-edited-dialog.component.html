@@ -1,0 +1,13 @@
+<header>
+    <h2 mat-dialog-title >Informações do Cadastro atualizadas com sucesso!</h2>
+    <button (click)="closeModal()" class="btn btn-sm">
+        Fechar
+    </button>
+</header>
+<mat-dialog-content>
+
+    <p>Nome: {{getData()?.nome}}</p>
+    <p>CPF: {{getData()?.cpf}}</p>
+    <p>Endereço: {{getData()?.end}}</p>
+
+</mat-dialog-content>

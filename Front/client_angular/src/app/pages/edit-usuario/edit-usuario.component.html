@@ -1,0 +1,60 @@
+<main class="container">
+    <p><a [routerLink]="['../../']"
+          style="margin: 5px;"
+          class="btn btn-sm"
+        > Voltar </a></p>
+    <div class="row">    
+        <div class="col"></div>
+            <div class="col m-2 p-3 card">
+                <h5 class="card-title">Insira as informações do livro: </h5>
+<div class="container">
+
+    
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+            <label>
+                Nome
+                <input
+                class="form-control"
+                type="text"
+                formControlName="nome"
+                required
+                />
+            </label>
+        </div>
+        <div class="form-group">
+            <label>
+                CPF: 
+                <input
+                class="form-control"
+                type="text"
+                formControlName="cpf"
+                required
+
+                />
+            </label>
+        </div>
+        <div class="form-group">
+            <label>
+                Endereço
+                <input
+                class="form-control"
+                type="text"
+                formControlName="end"
+                required
+                />
+            </label>
+        </div>
+    
+    
+        <button class="btn btn-primary btn-sm mt-2"
+        [disabled]="isSubmitting"
+            (click)="onSubmit()"> Submit</button>
+    </form>
+</div>
+
+</div>
+<div class=" col"></div>
+</div>
+
+</main>

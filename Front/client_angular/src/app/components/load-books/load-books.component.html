@@ -1,0 +1,36 @@
+<button (click)="carregarCriarLivro()"
+ class="btn btn-sm">
+    {{criarLivroText()}}
+</button>
+<a class="btn btn-sm" [routerLink]="['pedidos']">
+    Consultar Pedidos
+</a>
+<a class="btn btn-sm" [routerLink]="['usuarios']">
+    Consultar Usuarios
+</a>
+<a class="btn btn-sm" [routerLink]="['funcionarios']">
+    Consultar Funcionarios
+</a>
+
+
+
+
+@if (criarLivro()) {
+    <app-create-book-page></app-create-book-page>
+}@else { 
+    <form [formGroup]="searchForm" (ngSubmit)="pesquisarLivro()">
+
+        <div class="form-group">
+            <input type="text" 
+            class="form-control m-2 p-2"
+            formControlName="titulo"
+            >
+            
+            
+            <button class=" m-2  btn btn-primary btn-sm"
+                    (click)="pesquisarLivro()"
+            >Pesquisar</button>
+        </div>
+    </form>
+   <app-lista-livros></app-lista-livros>
+}

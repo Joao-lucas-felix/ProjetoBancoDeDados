@@ -1,9 +1,16 @@
 package com.joao_lucas_felix.ProjetoBancoDeDados.services;
 
 import com.joao_lucas_felix.ProjetoBancoDeDados.controllers.LivroController;
+import com.joao_lucas_felix.ProjetoBancoDeDados.domain.Autor;
 import com.joao_lucas_felix.ProjetoBancoDeDados.domain.DataTransferObjects.LivroDto;
+import com.joao_lucas_felix.ProjetoBancoDeDados.domain.Editora;
+import com.joao_lucas_felix.ProjetoBancoDeDados.domain.Escreve;
 import com.joao_lucas_felix.ProjetoBancoDeDados.domain.Livro;
+import com.joao_lucas_felix.ProjetoBancoDeDados.repositories.AutorRepository;
+import com.joao_lucas_felix.ProjetoBancoDeDados.repositories.EditoraRepository;
+import com.joao_lucas_felix.ProjetoBancoDeDados.repositories.EscreveRepository;
 import com.joao_lucas_felix.ProjetoBancoDeDados.repositories.LivroRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,40 +25,79 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 public class LivroService {
-    private final SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+    private final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     private static final Logger logger = Logger.getLogger(UsuarioService.class.getName());
     private final LivroRepository repository;
+    private final AutorRepository autorRepository;
+    private final EditoraRepository editoraRepository;
+    private final EscreveRepository escreveRepository;
     private final PagedResourcesAssembler<LivroDto> assembler;
     @Autowired
     public LivroService(LivroRepository repository,
-                          PagedResourcesAssembler<LivroDto> assembler){
+                          PagedResourcesAssembler<LivroDto> assembler,
+                        EditoraRepository editoraRepository,
+                        AutorRepository autorRepository,
+                        EscreveRepository escreveRepository){
         this.repository = repository;
         this.assembler = assembler;
+        this.autorRepository = autorRepository;
+        this.editoraRepository = editoraRepository;
+        this.escreveRepository = escreveRepository;
+
     }
 
+    @Transactional
     public LivroDto create(LivroDto dto) {
         if(dto == null) throw new RuntimeException("Informações obrigatorias nulas");
 
-        logger.info("Criando Livro" + dto.getDataLancamento());
+        logger.info("Criando Livro");
         try {
            Date data = formatter.parse(dto.getDataLancamento());
 
+            List<Autor> autores = dto.getAutores()
+                    .stream()
+                    .map(nomeAutor -> autorRepository.findAutorByName(nomeAutor, Pageable.ofSize(1))
+                            .stream()
+                            .filter(autor -> autor.getNome().equalsIgnoreCase(nomeAutor))
+                            .findFirst()
+                            .orElseGet(() -> autorRepository.save(new Autor(null, nomeAutor)))
+                    )
+                    .toList();
+
+            Editora editoraDoLivro = editoraRepository.findEditoraByName(dto.getNomeEditora(), Pageable.ofSize(1))
+                    .stream()
+                    .filter(editora -> editora.getNome().equalsIgnoreCase(dto.getNomeEditora()))
+                    .findFirst()
+                    .orElseGet(() -> editoraRepository.save(new Editora(null, dto.getNomeEditora())));
+
             Livro livroParaSerSalvo = new Livro(dto.getKey() ,
                     dto.getTitulo(), dto.getDescription(),
-                    dto.getPreco(), data, dto.getQtdEstoque());
+                    dto.getPreco(), data, dto.getQtdEstoque(), editoraDoLivro);
 
             Livro saved = repository.save(livroParaSerSalvo);
 
+            autores
+                    .forEach(autor -> {
+                        Escreve escreve = new Escreve();
+                        escreve.setLivro(saved);
+                        escreve.setAutor(autor);
+                        escreveRepository.save(escreve);
+                    });
+
+
             LivroDto livroDtoResponse = new LivroDto(saved.getId()
                     ,saved.getTitulo(), saved.getDescription(),
-                    saved.getPreco(), formatter.format(saved.getDataLacamento()), saved.getQtdEstoque());
+                    saved.getPreco(), formatter.format(saved.getDataLacamento()), saved.getQtdEstoque(), editoraDoLivro.getNome(),
+                    autores.stream().map(Autor::getNome).collect(Collectors.toSet()));
 
             livroDtoResponse
                     .add(linkTo(methodOn(LivroController.class)
@@ -72,7 +118,12 @@ public class LivroService {
         Page<LivroDto> mapDtos = paginaLivro.map(livro ->  new LivroDto(livro.getId()
                 ,livro.getTitulo(), livro.getDescription(),
                 livro.getPreco(), formatter.format(livro.getDataLacamento()),
-                livro.getQtdEstoque()));
+                livro.getQtdEstoque(),
+
+                editoraRepository.findById(livro.getIdEditora().getId())
+                        .orElseThrow(()-> new RuntimeException("Editora do Livro não encontrada")).getNome(),
+                        livro.getAutors().stream().map(Autor::getNome).collect(Collectors.toSet()))
+                );
 
         mapDtos.map(p -> p.add(linkTo(methodOn(LivroController.class).findById(p.getKey())).withSelfRel()));
 
@@ -91,9 +142,14 @@ public class LivroService {
 
         Livro entity = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Não foi encontrado nehum Usuario com esse ID!"));
-        LivroDto dto =  new LivroDto(entity.getId()
+        LivroDto dto =   new LivroDto(entity.getId()
                 ,entity.getTitulo(), entity.getDescription(),
-                entity.getPreco(), formatter.format(entity.getDataLacamento()), entity.getQtdEstoque());
+                entity.getPreco(), formatter.format(entity.getDataLacamento()),
+                entity.getQtdEstoque(),
+
+                editoraRepository.findById(entity.getIdEditora().getId())
+                        .orElseThrow(()-> new RuntimeException("Editora do Livro não encontrada")).getNome(),
+                entity.getAutors().stream().map(Autor::getNome).collect(Collectors.toSet()));
 
         dto.add(
                 linkTo(methodOn(LivroController.class)
@@ -112,7 +168,11 @@ public class LivroService {
         Page<LivroDto> mapDto = livroPage.map(livro ->  new LivroDto(livro.getId()
                 ,livro.getTitulo(), livro.getDescription(),
                 livro.getPreco(), formatter.format(livro.getDataLacamento()),
-                livro.getQtdEstoque()));
+                livro.getQtdEstoque(),
+
+                editoraRepository.findById(livro.getIdEditora().getId())
+                        .orElseThrow(()-> new RuntimeException("Editora do Livro não encontrada")).getNome(),
+                livro.getAutors().stream().map(Autor::getNome).collect(Collectors.toSet())));
         mapDto.map(
                 p -> p.add(
                         linkTo(methodOn(LivroController.class)
@@ -127,6 +187,7 @@ public class LivroService {
         return assembler.toModel(mapDto, link);
     }
 
+    @Transactional
     public LivroDto update(LivroDto dto) {
         if (dto == null) throw new RuntimeException("Livro com informações nulas!");
         logger.info("Atualizando os dados do livro com o id: "+dto.getKey()+"!");
@@ -144,9 +205,14 @@ public class LivroService {
             livroASerAtualizado.setDataLacamento(data);
             livroASerAtualizado.setQtdEstoque(dto.getQtdEstoque());
             Livro saved = repository.save(livroASerAtualizado);
-            LivroDto livroDtoResponse = new LivroDto(saved.getId()
-                    , saved.getTitulo(), saved.getDescription(),
-                    saved.getPreco(), formatter.format(saved.getDataLacamento()), saved.getQtdEstoque());
+            LivroDto livroDtoResponse =  new LivroDto(saved.getId()
+                    ,saved.getTitulo(), saved.getDescription(),
+                    saved.getPreco(), formatter.format(saved.getDataLacamento()),
+                    saved.getQtdEstoque(),
+
+                    editoraRepository.findById(saved.getIdEditora().getId())
+                            .orElseThrow(()-> new RuntimeException("Editora do Livro não encontrada")).getNome(),
+                    saved.getAutors().stream().map(Autor::getNome).collect(Collectors.toSet()));
 
             livroDtoResponse
                     .add(linkTo(methodOn(LivroController.class)
@@ -157,13 +223,14 @@ public class LivroService {
                 throw new RuntimeException("Data no formato invalido!");
             }
     }
-
+    @Transactional
     public void delete(Long id) {
         Livro livro = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Não foi encontrado Livro com esse ID!"));
 
         logger.info("Deletando o Livro com id: "+id+"!");
         repository.delete(livro);
+        //logger a livro infos
 
     }
 }

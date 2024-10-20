@@ -1,0 +1,58 @@
+<main class="container m-5 p-5">
+    @if (livro()) {
+    <div class="row ">
+            <div class="col-2"></div>
+        <div class="col">
+            <div class="card m-2 p-3" >
+                <div class="card-body mx-auto">
+                    <p class="card-title">
+                        <strong>Titulo:  </strong>
+                        {{livro()?.titulo}}
+                    </p>
+                    <p class="card-text">
+                        <strong>Descrição:  </strong>
+                        {{livro()?.description}}
+                    </p>
+                    <p class="card-text">
+                        <strong>Preço: </strong>
+                        {{livro()?.preco | currency:'BRL' }} 
+                    </p>
+                    <p class="card-text">
+                        <strong>Data de Lançamento: </strong>
+                        {{livro()?.dataLancamento }}
+                    </p>
+                    <p class="card-text">
+                        <strong>Quantidade em Estoque: </strong>
+                        {{livro()?.qtdEstoque }}
+                    </p>
+                    <p class="card-text">
+                        <strong>Editora: </strong>
+                        {{livro()?.nomeEditora }}
+                    </p>
+                    <p class="card-text">
+                        <strong>Autores: </strong>
+                        @for (item of livro()?.autores; track item) {
+                            {{item}}; 
+                        }
+                    </p>
+                    <div class="container mx-auto p-2">
+                        <p class="text text-small">
+                            Uma vez clicado no botão de Excluir o livro será permanente deletado, 
+                            <strong> operação não pode ser desfeita!</strong>
+                        </p>
+                        <a routerLink="../../../" class="card-link">Voltar</a>
+                        <a [routerLink]="['../../../livro/edit', livro()?.key]"
+                         class="card-link">Editar</a>
+                        <button 
+                        class="btn btn-danger btn-sm m-3"
+                        (click)="delete()"
+                        >Excluir</button>
+                    </div>
+                </div>
+            </div>   
+        </div>
+        <div class="col-2"></div>
+    </div>
+    }
+</main>
+

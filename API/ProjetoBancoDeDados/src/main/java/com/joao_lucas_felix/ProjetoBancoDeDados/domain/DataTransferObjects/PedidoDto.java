@@ -1,10 +1,12 @@
 package com.joao_lucas_felix.ProjetoBancoDeDados.domain.DataTransferObjects;
 
+import jakarta.persistence.Column;
 import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -19,4 +21,9 @@ public class PedidoDto extends RepresentationModel<PedidoDto> implements Seriali
     private Long idLivro;
     private String data;
     private Integer quantidade;
+
+    private String nomeUsuario;
+    private String tituloLivro;
+    private String funcionarioName;
+
 }

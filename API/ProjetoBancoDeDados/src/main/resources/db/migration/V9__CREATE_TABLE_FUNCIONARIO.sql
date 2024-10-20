@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS funcionario(
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    valor_vendido DECIMAL(10,2) NOT NULL,
+    PRIMARY KEY (id)
+)

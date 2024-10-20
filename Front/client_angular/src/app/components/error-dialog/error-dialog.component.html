@@ -1,0 +1,11 @@
+<header>
+    <h2 mat-dialog-title >Error!</h2>
+    <button (click)="closeModal()" class="btn btn-sm m-2 btn-danger">
+        Fechar
+    </button>
+</header>
+<mat-dialog-content>
+    <h2 mat-dialog-title >Status: {{ getData()?.status }}</h2>
+    <p>Message: {{getData()?.message}}</p>
+    <p>timestamp: {{getData()?.timestamp}}</p>
+</mat-dialog-content>

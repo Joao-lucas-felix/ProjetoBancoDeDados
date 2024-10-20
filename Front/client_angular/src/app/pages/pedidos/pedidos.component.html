@@ -1,0 +1,89 @@
+@for (item of linksNavigation(); track item) {
+    <a routerLink="{{item.link}}" style="margin: 5px;"> {{item.PageName}} </a>
+}
+<main class="container">
+    <div class="row">    
+        <div class="col"></div>
+            <div class="col m-2 p-3 card">
+                <div class="container">
+                    <form [formGroup]="pedidoForm" (ngSubmit)="onSubmit()">
+                        <div class="form-group">
+                            <label>
+                                Nome do Usuario
+                                <input
+                                class="form-control"
+                                type="text"
+                                formControlName="userName"
+                                required
+                                />
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                CPF
+                                @if (cpfIsInvalid()) {
+                                    <br>
+                                    <span class="text-danger">CPF precisa ser no formato XXX.XXX.XXX-XX</span>
+                                }
+                                <input
+                                class="form-control"
+                                type="text"
+                                formControlName="cpf"
+                                required
+                                />
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                Endereço
+                                <input
+                                class="form-control"
+                                type="text"
+                                formControlName="end"
+                                required
+                                />
+                            </label>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label>
+                                Quantidade
+                                <input
+                                class="form-control"
+                                type="number"
+                                formControlName="quantidade"
+                                required
+                                />
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                Nome do Funcionario responsavel pela venda: 
+                                <input
+                                class="form-control"
+                                type="text"
+                                formControlName="funcionarioName"
+                                required
+                                />
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                Data do pedido
+                                <input
+                                class="form-control"
+                                type="date"
+                                formControlName="data"
+                                />
+                            </label>
+                        </div>
+                        <button class="btn btn-primary btn-sm mt-2"
+                            [disabled]="!this.pedidoForm.valid"
+                            (click)="onSubmit()"> Submit</button>
+                    </form>
+                </div>
+            </div>
+        <div class=" col"></div>
+    </div>
+</main>

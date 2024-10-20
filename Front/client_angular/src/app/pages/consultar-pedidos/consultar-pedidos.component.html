@@ -1,0 +1,57 @@
+<a class="btn btn-sm" [routerLink]="['../']"> Livros </a>
+
+@if(pageOfPedidos(); as pedidos) {
+    @for (pedido of pedidos?._embedded?.pedidoDtoList; track pedido) {
+        <div class="row ">
+            <div class="col-2"></div>
+            <div class="col">
+            <div class="card m-2 p-3" >
+                <div class="card-body mx-auto">
+                    <p class="card-title">
+                        <strong>Usuario:  </strong>
+                        {{pedido.idUser}} - {{pedido.nomeUsuario}}
+                    </p>
+                    <p class="card-text">
+                        <strong>Livro:  </strong>
+                        {{pedido.idLivro}} - {{pedido.tituloLivro}}
+                    </p>
+                    <p class="card-text">
+                        <strong>Data do Pedido: </strong>
+                        {{pedido.data }}
+                    </p>
+                    <p class="card-text">
+                        <strong>Quantidade Pedida: </strong>
+                        {{pedido.quantidade }}
+                    </p>
+                    <p class="card-text">
+                        <strong>Funcionario responsavel: </strong>
+                        {{pedido.funcionarioName }}
+                    </p>
+                </div>
+            </div>   
+            </div>
+            <div class="col-2"></div>
+        </div>
+    }@empty {
+
+        <div class="row">
+            <div class="col"></div>
+            <div class="col">
+            <div class="card m-2 p-3">
+                <div class="card-body mx-auto">
+                    <h2 class="card-title">
+                        Algo deu Errado!
+                    </h2>
+                    <p class="card-text">
+                        Houve um error ao carregar os livros por favor tente novamente.
+                    </p>
+
+                    <a routerLink="" style="margin: 5px;" class="btn btn-sm btn-primary"> Clique aqui para voltar Para Home </a>
+                
+                </div>
+            </div>   
+            </div>
+            <div class="col"></div>
+        </div>
+    }
+}

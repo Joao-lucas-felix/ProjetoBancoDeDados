@@ -31,6 +31,9 @@ public class Pedido implements Serializable {
     @Column(name = "id_livro")
     private Long idLivro;
 
+    @Column(name = "id_funcionario")
+    private Long idFuncionario;
+
     @Column(name = "data")
     private Date data;
 

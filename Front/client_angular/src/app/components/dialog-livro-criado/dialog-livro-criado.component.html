@@ -1,0 +1,19 @@
+<header>
+    <h2 mat-dialog-title >sucesso!</h2>
+    <button (click)="closeModal()" class="btn btn-sm">
+        Fechar
+    </button>
+</header>
+<mat-dialog-content>
+    <h2 mat-dialog-title >Titulo: {{ getData()?.titulo }}</h2>
+    <article [innerHTML]="getData()?.description">
+    </article>
+    <p>Data de Lançamento: {{getData()?.dataLancamento}}</p>
+    <p>Editora: {{getData()?.nomeEditora}}</p>
+    <p>Quantidade em Estoque: {{getData()?.qtdEstoque}}</p>
+    <p>Preço: {{getData()?.preco}}</p>
+
+    <p>Clique em voltar caso não queira mais cadastrar livros!</p>
+
+
+</mat-dialog-content>

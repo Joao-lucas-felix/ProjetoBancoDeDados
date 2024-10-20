@@ -1,0 +1,13 @@
+<header>
+    <h2 mat-dialog-title >sucesso!</h2>
+    <button (click)="closeModal()" class="btn btn-sm">
+        Fechar
+    </button>
+</header>
+<mat-dialog-content>
+    <h2 mat-dialog-title >Pedido Realizado</h2>
+    <p>Usuario: {{ getData()?.nomeUsuario }}</p>
+    <p>Livro: {{ getData()?.tituloLivro }}</p>
+    <p>Data do Pedido: {{getData()?.data}}</p>
+    <p>Quantidade Pedida {{getData()?.quantidade}}</p>
+</mat-dialog-content>

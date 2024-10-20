@@ -1,0 +1,71 @@
+<a class="btn btn-sm mb-2" [routerLink]="['../']">
+    Voltar
+</a>
+
+<form [formGroup]="searchForm" (ngSubmit)="pesquisarFuncionario()">
+
+    <div class="form-group">
+        <input type="text" 
+        class="form-control m-2 p-2"
+        formControlName="nome"
+        >
+        
+        
+        <button class=" m-2  btn btn-primary btn-sm"
+                (click)="pesquisarFuncionario()"
+        >Pesquisar</button>
+    </div>
+</form> 
+
+@if(pageOfFuncionarios(); as usuarios) {
+    @for (funcionario of pageOfFuncionarios()?._embedded?.funcionarioDtoList; track funcionario) {
+        <div class="row ">
+            <div class="col-2"></div>
+            <div class="col">
+            <div class="card m-2 p-1" >
+                <div class="card-body mx-auto">
+                    <p class="card-title">
+                        Id:  
+                        {{funcionario.key}} 
+                    </p>
+                    <p class="card-text">
+                        <strong>Nome:  </strong>
+                        {{funcionario.nome}}
+                    </p>
+                    <p class="card-text">
+                        <strong>Valor Total das Vendas: </strong>
+                        {{funcionario.valorVendido }}
+                    </p>
+                    <div class="container">
+                        <a  [routerLink]="[funcionario.key]"
+                        class="btn btn-sm btn-primary m-2 ">Vizualizar as Vendas do funcionario </a>
+                    </div>
+                </div>
+ 
+            </div>   
+            </div>
+            <div class="col-2"></div>
+        </div>
+    }@empty {
+
+        <div class="row">
+            <div class="col"></div>
+            <div class="col">
+            <div class="card m-2 p-3">
+                <div class="card-body mx-auto">
+                    <h2 class="card-title">
+                        Algo deu Errado!
+                    </h2>
+                    <p class="card-text">
+                        Houve um error ao carregar os livros por favor tente novamente.
+                    </p>
+
+                    <a routerLink="" style="margin: 5px;" class="btn btn-sm btn-primary"> Clique aqui para voltar Para Home </a>
+                
+                </div>
+            </div>   
+            </div>
+            <div class="col"></div>
+        </div>
+    }
+}

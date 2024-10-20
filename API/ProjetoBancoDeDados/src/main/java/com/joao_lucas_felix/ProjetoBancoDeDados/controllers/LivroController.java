@@ -48,7 +48,7 @@ public class LivroController {
     public ResponseEntity<PagedModel<EntityModel<LivroDto>>> findByTitulo
             (@PathVariable(name = "titulo") String titulo,
              @RequestParam(value = "page", defaultValue = "0") Integer page,
-             @RequestParam(value = "size", defaultValue = "12") Integer size,
+             @RequestParam(value = "size", defaultValue = "50") Integer size,
              @RequestParam(value = "direction", defaultValue = "asc") String direction ){
 
         var sortDirection = "desc".equalsIgnoreCase(direction) ? Sort.Direction.DESC : Sort.Direction.ASC;

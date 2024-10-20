@@ -1,5 +1,6 @@
 package com.joao_lucas_felix.ProjetoBancoDeDados.controllers;
 
+import com.joao_lucas_felix.ProjetoBancoDeDados.domain.DataTransferObjects.FrontEndPedidoDto;
 import com.joao_lucas_felix.ProjetoBancoDeDados.domain.DataTransferObjects.PedidoDto;
 import com.joao_lucas_felix.ProjetoBancoDeDados.services.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +21,11 @@ public class PedidoController {
         this.service = service;
     }
 
+
     //Create
     @PostMapping
     public ResponseEntity<PedidoDto> create(
-            @RequestBody PedidoDto pedidoDto
+            @RequestBody FrontEndPedidoDto pedidoDto
     ){
         return ResponseEntity.ok(this.service.create(pedidoDto));
     }
@@ -46,6 +48,31 @@ public class PedidoController {
 
         return ResponseEntity.ok(service.findById(id));
     }
+
+    @GetMapping(value = "/PedidoUsuario/{id}")
+    public ResponseEntity<PagedModel<EntityModel<PedidoDto>>>  findPedidosDoUsario
+            (@PathVariable(name = "id") Long id,
+             @RequestParam(value = "page", defaultValue = "0") Integer page,
+             @RequestParam(value = "size", defaultValue = "12") Integer size,
+             @RequestParam(value = "direction", defaultValue = "asc") String direction){
+        var sortDirection = "desc".equalsIgnoreCase(direction) ? Sort.Direction.DESC : Sort.Direction.ASC;
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "quantidade"));
+        return ResponseEntity.ok(service.findPedidosByUser(id, pageable));
+    }
+
+    @GetMapping(value = "/PedidoFuncionario/{id}")
+    public ResponseEntity<PagedModel<EntityModel<PedidoDto>>>  findPedidosDoFuncionario
+            (@PathVariable(name = "id") Long id,
+             @RequestParam(value = "page", defaultValue = "0") Integer page,
+             @RequestParam(value = "size", defaultValue = "12") Integer size,
+             @RequestParam(value = "direction", defaultValue = "asc") String direction){
+        var sortDirection = "desc".equalsIgnoreCase(direction) ? Sort.Direction.DESC : Sort.Direction.ASC;
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "quantidade"));
+        return ResponseEntity.ok(service.findPedidosByFuncionario(id, pageable));
+    }
+
 
     //Update
     @PutMapping

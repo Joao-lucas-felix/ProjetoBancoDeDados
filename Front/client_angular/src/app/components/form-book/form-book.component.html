@@ -1,0 +1,85 @@
+<div class="container">
+    <form [formGroup]="bookForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+            <label>
+                Titulo
+                <input
+                class="form-control"
+                type="text"
+                formControlName="titulo"
+                required
+                />
+            </label>
+        </div>
+        <div class="form-group">
+            <label>
+                Descrption
+                <input
+                class="form-control"
+                type="text"
+                formControlName="description"
+                required
+                />
+            </label>
+        </div>
+        <div class="form-group">
+            <label>
+                Preço
+                <input
+                class="form-control"
+                type="number"
+                formControlName="preco"
+                required
+                />
+            </label>
+        </div>
+    
+        <div class="form-group">
+            <label>
+                Quantidade No Estoque
+                <input
+                class="form-control"
+                type="number"
+                formControlName="qtdEstoque"
+                required
+                />
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label>
+                Nome da Editora:
+                <input
+                class="form-control"
+                type="text"
+                formControlName="nomeEditora"
+                />
+            </label>
+        </div>
+        <div class="form-group">
+            <label>
+                Autor <br> <small> (Em caso de multiplos autores separe-os por ",") </small>
+                <input
+                class="form-control"
+                type="text"
+                formControlName="autores"
+                />
+            </label>
+        </div>
+        <div class="form-group">
+            <label>
+                Data de Lançamento
+                <input
+                class="form-control"
+                type="date"
+                formControlName="dataLancamento"
+                />
+            </label>
+        </div>
+        <button class="btn btn-primary btn-sm mt-2"
+        [disabled]=""
+            (click)="onSubmit()"
+        
+            > Submit</button>
+    </form>
+</div>

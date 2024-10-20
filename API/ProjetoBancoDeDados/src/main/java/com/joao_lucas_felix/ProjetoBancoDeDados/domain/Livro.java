@@ -6,6 +6,7 @@ import lombok.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "livro")
@@ -31,4 +32,27 @@ public class Livro implements Serializable {
     private Date dataLacamento;
     @Column(name = "qtd_estoque")
     private Integer qtdEstoque;
+
+
+    //Relacionamentos:
+    @ManyToOne
+    @JoinColumn(name = "id_editora", nullable = false)
+    private Editora idEditora;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "escreve",
+            joinColumns = {@JoinColumn(name = "id_livro")},
+            inverseJoinColumns = {@JoinColumn(name = "id_autor")}
+    )
+    private List<Autor> autors;
+
+    public Livro(Long id, String titulo, String description, Double preco, Date dataLacamento, Integer qtdEstoque, Editora idEditora) {
+        this.id = id;
+        this.titulo = titulo;
+        this.description = description;
+        this.preco = preco;
+        this.dataLacamento = dataLacamento;
+        this.qtdEstoque = qtdEstoque;
+        this.idEditora = idEditora;
+    }
 }

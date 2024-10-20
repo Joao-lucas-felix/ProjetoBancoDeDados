@@ -1,0 +1,76 @@
+@if(pageOfBooks(); as livros) {
+    @for (livro of livros?._embedded?.livroDtoList; track livro) {
+        <div class="row ">
+            <div class="col-2"></div>
+            <div class="col">
+            <div class="card m-2 p-3" >
+                <div class="card-body mx-auto">
+                    <p class="card-title">
+                        <strong>Titulo:  </strong>
+                        {{livro.titulo}}
+                    </p>
+                    <p class="card-text">
+                        <strong>Descrição:  </strong>
+                        {{livro.description}}
+                    </p>
+                    <p class="card-text">
+                        <strong>Preço: </strong>
+                        {{livro.preco | currency:'BRL' }} 
+                    </p>
+                    <p class="card-text">
+                        <strong>Data de Lançamento: </strong>
+                        {{livro.dataLancamento }}
+                    </p>
+                    <p class="card-text">
+                        <strong>Quantidade em Estoque: </strong>
+                        {{livro.qtdEstoque }}
+                    </p>
+                    <p class="card-text">
+                        <strong>Editora: </strong>
+                        {{livro.nomeEditora}}
+                    </p>
+                    <p class="card-text">
+                        <strong>Autores: </strong>
+                        @for (item of livro.autores; track item) {
+                            {{item}};  
+                        }
+                    </p>
+                    <div class="container mx-auto">
+                        <a  [routerLink]="['livro', livro.key]"
+                        class="card-link">Ver livro</a>
+                        <a  [routerLink]="['livro/edit', livro.key]"
+                        class="card-link">Editar</a>
+                        <a [routerLink]="['livro/delete', livro.key]"
+                        class="card-link">Excluir</a>
+
+                        <a [routerLink]="['pedido', livro.key]"
+                        class="card-link">Fazer Pedido</a>
+                    </div>
+                </div>
+            </div>   
+            </div>
+            <div class="col-2"></div>
+        </div>
+    }@empty {
+
+        <div class="row">
+            <div class="col"></div>
+            <div class="col">
+            <div class="card m-2 p-3">
+                <div class="card-body mx-auto">
+                    <h2 class="card-title">
+                        Algo deu Errado!
+                    </h2>
+                    <p class="card-text">
+                        Houve um error ao carregar os livros por favor tente novamente.
+                    </p>
+
+                    <a routerLink="" style="margin: 5px;" class="btn btn-sm btn-primary"> Clique aqui para voltar Para Home </a>
+                
+                </div>
+            </div>   
+            </div>
+            <div class="col"></div>
+        </div>
+    }
+}
